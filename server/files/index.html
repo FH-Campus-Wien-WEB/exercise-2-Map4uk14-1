@@ -1,13 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Movies!</title>
-    <link rel="stylesheet" href="index.css" />
-    <script src="index.js"></script>
-  </head>
 
-  <body>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Movies!</title>
+    <style>
+        /* Part 3: Your styling goes here */
+        body {
+            font-family: 'Franklin Gothic Medium', 'Arial', sans-serif;
+            background-color: #635b5b;
+            margin: 50px;
+        }
+
+        h1 {
+            font-weight: bold;
+            margin: 20px;
+        }
+
+        .movie {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.61);
+            margin-bottom: 40px;
+            padding: 20px;
+        }
+        .movie img {
+            border-radius: 15px;
+        }
+
+        .genre {
+            display: inline-block;
+            background-color: #e9c372;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .genre:hover {
+            background-color: #d4a64f;
+            transform: scale(1.1);
+        }
+
+
+        
+        
+    </style>
+    <script>
+        window.onload = function () {
+            const xhr = new XMLHttpRequest()
+            xhr.onload = function () {
+                const bodyElement = document.querySelector("body")
+                if (xhr.status == 200) {
+		            /* Part 2: Build the HTML elements here and append them to the body */ 
+                    const movies = JSON.parse(xhr.responseText)
+
+                    movies.forEach(element => {
+
+                        let genresHTML = "<p>Genres: ";
+                        element.Genres.forEach(genre => {
+                            genresHTML += "<span class='genre'>" + genre + "</span>";
+                        });
+                        genresHTML += "</p>";
+
+                        const moviePiece = document.createElement("div")
+                        moviePiece.className = "movie"
+                        moviePiece.innerHTML = 
+                          "<h1>" + element.Title + "</h1>" 
+                        + "<img src='" + element.Poster + "' alt='Poster'>"
+                        + "<p class='metascore'> Metascore: " + element.Metascore + " / 100</p>"
+                        + "<p class='imdb-rating'> IMDb Rating: " + element.imdbRating + " / 10</p>"
+                        + "<p class='released'> Released: " + element.Released + "</p>" 
+                        + "<p class='runtime'> Runtime: " + element.Runtime + " min</p>"
+                        + genresHTML
+                        + "<p class='directors'> Directors: " + element.Directors + "</p>"
+                        + "<p class='writers'> Writers: " + element.Writers + "</p>"
+                        + "<p class='actors'> Actors: " + element.Actors + "</p>"
+                        + "<p class='plot'> Plot: " + element.Plot + "</p>"
+                        
+                        bodyElement.append(moviePiece)
+                    });
+
+                } else {
+                    bodyElement.append("Daten konnten nicht geladen werden, Status " + xhr.status + " - " + xhr.statusText)
+                }
+            }
+            xhr.open("GET", "/movies")
+            xhr.send()
+        }
+    </script>
+
+</head>
+
+<body>
+</body>
+
 </html>
+
