@@ -63,18 +63,35 @@ function putMovie() {
     - Get the movie data using getMovie()
     - Configure the XMLHttpRequest to make a PUT to /movies/:imdbID
     - Set the 'Content-Type' appropriately for JSON data
-    - Configure the function below as the onload event handler
     - Send the movie data as JSON
   */
-
+  
+  // Get the movie data from the form
+  const movie = getMovie();
+  
+  // Create a new XMLHttpRequest
   const xhr = new XMLHttpRequest();
+  
+  // Set up the onload handler to handle the response
   xhr.onload = function () {
-    if (xhr.status == 200 || xhr.status === 204) {
+    if (xhr.status == 200 || xhr.status === 201) {
+      // Success: navigate back to the overview page
       location.href = "index.html";
     } else {
+      // Error: show alert with status code
       alert("Saving of movie data failed. Status code was " + xhr.status);
     }
   };
+  
+  // Configure the request: PUT to /movies/:imdbID
+  const imdbID = movie.imdbID;
+  xhr.open("PUT", "/movies/" + imdbID);
+  
+  // Set the Content-Type header for JSON data
+  xhr.setRequestHeader("Content-Type", "application/json");
+  
+  // Send the movie data as JSON string
+  xhr.send(JSON.stringify(movie));
 }
 
 /** Loading and setting the movie data for the movie with the passed imdbID */
